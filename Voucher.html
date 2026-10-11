@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>2027 유럽 가족 여행 일정 및 바우처</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #f4f7f6;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        ul.itinerary {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul.itinerary > li {
+            background: #ffffff;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 6px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            /* 이미지가 자연스럽게 들어가도록 위치 기준 설정 */
+            position: relative; 
+        }
+        .date-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2980b9;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .details {
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            color: #555;
+        }
+        .voucher-btn {
+            padding: 8px 14px;
+            margin: 4px 4px 0 0;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+        .voucher-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* 박스 안에서 보여질 이미지 영역 스타일 */
+        .inline-image-container {
+            margin-top: 15px;
+            text-align: center;
+            display: none; /* 기본적으로는 숨김 */
+        }
+        .inline-image-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <h2>✈️ 2027년 유럽 가족 여행 전체 일정표</h2>
+
+    <ul class="itinerary">
+        <!-- 스페인 일정 -->
+        <li>
+            <span class="date-title">📍 스페인 : 마드리드</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'madrid_voucher.jpg')">마드리드 숙소 바우처 보기</button>
+        </li>
+        <li>
+            <span class="date-title">📍 스페인 : 세비야</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Seville_Voucher.jpg')">세비야 숙소 바우처 보기</button>
+        </li>
+        <li>
+            <span class="date-title">📍 스페인 : 론다</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Ronda_Voucher.jpg')">론다 숙소 바우처 보기</button>
+        </li>
+        <li>
+            <span class="date-title">📍 스페인 : 그라나다</span>
+            <div class="details">숙소 및 알함브라 궁전 방문 일정</div>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Granada_Voucher.jpg')">그라나다 숙소 바우처 보기</button>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Alhambra_SHJ_1.jpg')">승훈 알함브라 티켓</button>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Alhambra_SHJ_3.jpg')">은진 알함브라 티켓</button>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Alhambra_SHJ_5.jpg')">지후 알함브라 티켓</button>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Alhambra_SHJ_7.jpg')">지환 알함브라 티켓</button>
+        </li>
+        <li>
+            <span class="date-title">📍 스페인 : 말라가</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'malaga_voucher.jpg')">말라가 숙소 바우처 보기</button>
+        </li>
+        
+        <!-- 이동: 말라가 -> 바르셀로나 -->
+        <li>
+            <span class="date-title">🛫 비행 : 말라가 ➔ 바르셀로나</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'malaga2BCN.jpg')">라이언에어 항공권 보기</button>
+        </li>
+
+        <!-- 스페인: 바르셀로나 -->
+        <li>
+            <span class="date-title">📍 스페인 : 바르셀로나</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'Barcelona_voucher_1.jpg')">바르셀로나 H10 바우처 보기</button>
+        </li>
+
+        <!-- 이동: 바르셀로나 -> 로마 -->
+        <li>
+            <span class="date-title">🛫 비행 : 바르셀로나 ➔ 로마</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'BCN2FCO.jpg')">부엘링 BCN-FCO 항공권 보기</button>
+        </li>
+
+        <!-- 이탈리아 일정 -->
+        <li>
+            <span class="date-title">📍 이탈리아 : 로마</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'rome_voucher.jpg')">로마 숙소 바우처 보기</button>
+        </li>
+        <li>
+            <span class="date-title">📍 이탈리아 : 피렌체</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'florence_voucher.jpg')">피렌체 숙소 바우처 보기</button>
+        </li>
+
+        <!-- 이동: 피렌체 -> 파리 -->
+        <li>
+            <span class="date-title">🛫 비행 : 피렌체 ➔ 파리</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'FLR2ORY.jpg')">부엘링 FLR-ORY 항공권 보기</button>
+        </li>
+
+        <!-- 프랑스 일정 -->
+        <li>
+            <span class="date-title">📍 프랑스 : 파리</span>
+            <button class="voucher-btn" onclick="showVoucher(this, 'paris_voucher.jpg')">파리 시타딘 에펠 바우처 보기</button>
+        </li>
+    </ul>
+
+    <script>
+        function showVoucher(btnElement, filename) {
+            // 클릭된 버튼이 있는 리스트(li) 칸을 찾습니다.
+            var parentLi = btnElement.parentElement;
+            
+            // 해당 칸 안에 이미지가 들어갈 공간이 있는지 확인합니다.
+            var imgContainer = parentLi.querySelector('.inline-image-container');
+            
+            // 없으면 새로 만들어줍니다.
+            if (!imgContainer) {
+                imgContainer = document.createElement('div');
+                imgContainer.className = 'inline-image-container';
+                
+                var img = document.createElement('img');
+                imgContainer.appendChild(img);
+                parentLi.appendChild(imgContainer);
+            }
+            
+            var imgTag = imgContainer.querySelector('img');
+            
+            // 이미 열려있는 상태에서 같은 버튼을 또 눌렀다면 숨김 처리 (접기 기능)
+            if (imgTag.getAttribute('src') === filename && imgContainer.style.display === 'block') {
+                imgContainer.style.display = 'none';
+            } else {
+                // 다른 버튼을 누르거나 처음 누른 경우 이미지를 보여줌
+                imgTag.src = filename;
+                imgContainer.style.display = 'block';
+            }
+        }
+    </script>
+
+</body>
+</html>
