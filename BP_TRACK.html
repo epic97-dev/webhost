@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1976D2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>혈압 자동 기록 & 추이 분석</title>
+  <style>
+    :root { --primary: #1976D2; --danger: #D32F2F; --success: #2E7D32; --bg: #F4F6F9; --card: #FFFFFF; --text: #212121; --subtext: #757575; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; }
+    body { margin: 0; background-color: var(--bg); color: var(--text); padding-bottom: 40px; }
+    header { background-color: var(--primary); color: white; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    header h1 { margin: 0; font-size: 18px; font-weight: 700; }
+    .icon-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+    .container { max-width: 540px; margin: 0 auto; padding: 16px; }
+    .btn-row { display: flex; gap: 10px; margin-bottom: 16px; }
+    .btn { flex: 1; height: 50px; border-radius: 10px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .btn-primary { background-color: var(--primary); color: white; box-shadow: 0 3px 6px rgba(25,118,210,0.25); }
+    .btn-outline { background-color: white; color: var(--primary); border: 2px solid var(--primary); }
+    .btn-success { background-color: var(--success); color: white; font-size: 14px; height: 42px; }
+    .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .card-title { font-size: 16px; font-weight: 700; margin: 0 0 12px 0; }
+    .preview-img { width: 100%; max-height: 180px; object-fit: contain; background: #000; border-radius: 8px; margin-bottom: 12px; display: none; }
+    .status-msg { font-size: 13px; padding: 10px; border-radius: 8px; margin-bottom: 12px; background: #E3F2FD; color: #0D47A1; display: none; text-align: center; font-weight: 600; }
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .input-group label { display: block; font-size: 12px; color: var(--subtext); margin-bottom: 4px; font-weight: 600; }
+    .input-group input { width: 100%; padding: 10px; font-size: 16px; font-weight: 700; border: 1px solid #CFD8DC; border-radius: 8px; text-align: center; }
+    .datetime-group { margin-bottom: 14px; }
+    .datetime-group label { display: block; font-size: 12px; color: var(--subtext); margin-bottom: 4px; font-weight: 600; }
+    .datetime-group input { width: 100%; padding: 10px; font-size: 14px; border: 1px solid #CFD8DC; border-radius: 8px; }
+    .record-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #ECEFF1; }
+    .record-item:last-child { border-bottom: none; }
+    .bp-value { font-size: 20px; font-weight: 800; }
+    .bp-high { color: var(--danger); }
+    .bp-normal { color: var(--primary); }
+    .bp-meta { font-size: 13px; color: var(--subtext); margin-top: 4px; }
+    .del-btn { background: none; border: 1px solid #E0E0E0; color: #757575; padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    .empty-msg { text-align: center; color: var(--subtext); padding: 30px 10px; font-size: 14px; line-height: 1.6; }
+    .legend-row { display: flex; gap: 14px; font-size: 13px; margin-bottom: 10px; font-weight: 600; }
+    .backup-row { display: flex; gap: 8px; margin-top: 12px; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
+    .modal { background: white; border-radius: 12px; padding: 20px; width: 100%; max-width: 400px; }
+    .modal h3 { margin: 0 0 10px 0; font-size: 17px; }
+    .modal p { font-size: 13px; color: var(--subtext); line-height: 1.5; margin-bottom: 12px; }
+    .modal input { width: 100%; padding: 10px; border: 1px solid #CCC; border-radius: 8px; margin-bottom: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🩺 혈압 자동 기록장</h1>
+    <button class="icon-btn" onclick="openApiModal()">⚙️ AI 키 설정</button>
+  </header>
+  <div class="container">
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleCameraCapture(event)">
+    <input type="file" id="importInput" accept=".csv" style="display:none" onchange="importCSV(event)">
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="triggerCamera()">📷 혈압계 촬영</button>
+      <button class="btn btn-outline" id="toggleViewBtn" onclick="toggleChartView()">📈 추이 분석</button>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">혈압 측정값 확인 및 저장</h2>
+      <img id="previewImage" class="preview-img" alt="촬영된 혈압계 사진">
+      <div id="statusMessage" class="status-msg"></div>
+      <div class="input-grid">
+        <div class="input-group"><label>수축기 (최고)</label><input type="number" id="sysInput" placeholder="120" inputmode="numeric"></div>
+        <div class="input-group"><label>이완기 (최저)</label><input type="number" id="diaInput" placeholder="80" inputmode="numeric"></div>
+        <div class="input-group"><label>맥박 (PUL)</label><input type="number" id="pulInput" placeholder="70" inputmode="numeric"></div>
+      </div>
+      <div class="datetime-group"><label>측정 일시 (자동 입력됨)</label><input type="datetime-local" id="dateInput"></div>
+      <button class="btn btn-primary" style="width:100%; height:46px;" onclick="saveRecord()">💾 이 내용으로 저장하기</button>
+    </div>
+
+    <div class="card" id="chartSection" style="display:none;">
+      <h2 class="card-title">📊 혈압 변화 추이 그래프</h2>
+      <div class="legend-row">
+        <span style="color:#E53935;">● 수축기(최고)</span>
+        <span style="color:#1E88E5;">● 이완기(최저)</span>
+        <span style="color:#9E9E9E;">--- 정상기준(120/80)</span>
+      </div>
+      <canvas id="bpCanvas" width="480" height="260" style="width:100%; height:260px; background:#FAFAFA; border-radius:8px; border:1px solid #EEE;"></canvas>
+    </div>
+
+    <div class="card" id="listSection">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h2 class="card-title" style="margin:0;">📋 최근 측정 기록 (<span id="recordCount">0</span>건)</h2>
+      </div>
+      <div id="recordList"></div>
+
+      <!-- 백업 및 복구 버튼 영역 -->
+      <div class="backup-row">
+        <button class="btn btn-success btn-success" style="flex:1;" onclick="exportCSV()">📤 엑셀(CSV) 백업</button>
+        <button class="btn btn-outline" style="flex:1; height:42px; font-size:14px;" onclick="triggerImport()">📥 백업 파일 복구</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="apiModal">
+    <div class="modal">
+      <h3>🔑 Gemini API 키 설정</h3>
+      <p>Google AI Studio에서 발급받은 무료 Gemini API 키를 입력하면 혈압계 사진 촬영 시 숫자를
