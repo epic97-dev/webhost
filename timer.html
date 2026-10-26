@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>맞춤형 삐삐 타이머 (시간 및 간격 설정)</title>
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            text-align: center; 
+            margin: 0; 
+            padding: 30px 20px; 
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card-bg);
+            padding: 28px;
+            border-radius: 24px;
+            box-shadow: 
+                0 20px 25px -5px rgba(15, 23, 42, 0.08),
+                0 8px 10px -6px rgba(15, 23, 42, 0.04),
+                0 0 1px 1px rgba(15, 23, 42, 0.05);
+        }
+
+        .bird-banner {
+            background: linear-gradient(135deg, #38bdf8 0%, #34d399 100%);
+            border-radius: 16px;
+            padding: 16px;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .bird-banner span {
+            font-size: 2rem;
+        }
+
+        .bird-banner-text {
+            text-align: left;
+        }
+
+        .bird-banner-text h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .bird-banner-text p {
+            margin: 2px 0 0 0;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        /* 설정 입력 영역 스타일 */
+        .settings-box {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        .setting-item {
+            margin-bottom: 12px;
+        }
+        .setting-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .setting-input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .setting-input-group input {
+            flex: 1;
+            padding: 10px 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            outline: none;
+            background: white;
+            color: var(--text-main);
+        }
+
+        .setting-input-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .timer-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px 10px;
+            border: 1px solid #e2e8f0;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .timer-card.highlight {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        .card-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .time-value {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--text-main);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-card.highlight .time-value {
+            color: #047857;
+        }
+        
+        #status { 
+            font-size: 1rem; 
+            font-weight: 700; 
+            color: #0284c7; 
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            background: #e0f2fe;
+            border-radius: 14px;
+            border: 1px solid #bae6fd;
+            padding: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button { 
+            flex: 1;
+            padding: 15px 10px; 
+            font-size: 1rem; 
+            font-weight: 700;
+            color: white; 
+            border: none; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        #startBtn { 
+            background: var(--accent-green); 
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3); 
+        }
+        #startBtn:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        #pauseBtn { 
+            background: var(--accent-orange); 
+            box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3); 
+            display: none; 
+        }
+        #pauseBtn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+
+        #resetBtn { 
+            background: var(--accent-red); 
+            box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3); 
+            display: none; 
+        }
+        #resetBtn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        button:active { 
+            transform: translateY(1px) !important; 
+        }
+
+        button:disabled { 
+            background: #cbd5e1 !important; 
+            box-shadow: none !important; 
+            cursor: not-allowed; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="bird-banner">
+            <span>🐦</span>
+            <div class="bird-banner-text">
+                <h3>맞춤형 삐삐 타이머</h3>
+                <p>원하시는 전체 시간과 신호 간격을 설정하십니다</p>
+            </div>
+        </div>
+
+        <!-- 설정 입력 영역 -->
+        <div class="settings-box" id="settingsBox">
+            <div class="setting-item">
+                <label class="setting-label">전체 타이머 시간 (분)</label>
+                <div class="setting-input-group">
+                    <input type="number" id="totalMinutesInput" value="10" min="1" max="180">
+                </div>
+            </div>
+            <div class="setting-item" style="margin-top: 10px;">
+                <label class="setting-label">삐삐 울림 간격 (초)</label>
+                <div class="setting-input-group">
+                    <input type="number" id="intervalSecondsInput" value="15" min="1" max="3600">
+                </div>
+            </div>
+        </div>
+        
+        <div class="timer-grid">
+            <div class="timer-card">
+                <div class="card-label">전체 남은 시간</div>
+                <div class="time-value" id="totalTimeDisplay">10:00</div>
+            </div>
+            <div class="timer-card highlight">
+                <div class="card-label">다음 삐삐까지</div>
+                <div class="time-value" id="intervalTimeDisplay">15초</div>
+            </div>
+        </div>
+
+        <div id="status">대기 중<br>(설정 후 시작 버튼을 누르시옵소서)</div>
+        
+        <div class="btn-group">
+            <button id="startBtn" onclick="startTimer()">시작</button>
+            <button id="pauseBtn" onclick="pauseTimer()">일시정지</button>
+            <button id="resetBtn" onclick="resetTimer()">초기화</button>
+        </div>
+    </div>
+
+    <script>
+        let totalSeconds = 600;
+        let remainingSeconds = 600;
+        let beepInterval = 15;
+        let currentIntervalSeconds = 15;
+        
+        let totalCount = 0;
+        let currentCount = 0;
+        
+        let mainTimer = null;
+        let audioCtx = null;
+        let isPaused = false;
+
+        function formatTime(sec) {
+            let m = Math.floor(sec / 60);
+            let s = sec % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateDisplay() {
+            document.getElementById("totalTimeDisplay").innerText = formatTime(remainingSeconds);
+            document.getElementById("intervalTimeDisplay").innerText = `${currentIntervalSeconds}초`;
+        }
+
+        function applySettings() {
+            let minInput = parseInt(document.getElementById("totalMinutesInput").value) || 10;
+            let secInput = parseInt(document.getElementById("intervalSecondsInput").value) || 15;
+            
+            totalSeconds = minInput * 60;
+            beepInterval = secInput;
+            
+            remainingSeconds = totalSeconds;
+            currentIntervalSeconds = beepInterval;
+            totalCount = Math.floor(totalSeconds / beepInterval);
+            currentCount = 0;
+            
+            updateDisplay();
+        }
+
+        function playLoudBeep() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const now = audioCtx.currentTime;
+                playTone(now, 1050, 0.18); 
+                playTone(now + 0.22, 1050, 0.22);
+            } catch (e) {
+                console.log("오디오 재생 실패:", e);
+            }
+        }
+
+        function playTone(startTime, freq, duration) {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'square'; 
+            osc.frequency.setValueAtTime(freq, startTime);
+
+            gain.gain.setValueAtTime(0.4, startTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(startTime);
+            osc.stop(startTime + duration);
+        }
+
+        function startTimer() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            } catch(e) {}
+
+            if (!isPaused) {
+                applySettings();
+                playLoudBeep(); // 시작 알림음
+            }
+            isPaused = false;
+
+            // 설정 입력창 비활성화
+            document.getElementById("settingsBox").style.opacity = "0.6";
+            document.getElementById("totalMinutesInput").disabled = true;
+            document.getElementById("intervalSecondsInput").disabled = true;
+
+            document.getElementById("startBtn").style.display = "none";
+            document.getElementById("pauseBtn").style.display = "inline-block";
+            document.getElementById("resetBtn").style.display = "inline-block";
+
+            document.getElementById("status").innerHTML = `🔔 타이머 작동 중...<br>(${currentCount} / ${totalCount}회 울림)`;
+
+            if (mainTimer) clearInterval(mainTimer);
+
+            mainTimer = setInterval(() => {
+                if (remainingSeconds > 0) {
+                    remainingSeconds--;
+                    currentIntervalSeconds--;
+
+                    if (currentIntervalSeconds <= 0) {
+                        currentCount++;
+                        playLoudBeep();
+                        currentIntervalSeconds = beepInterval;
+                        document.getElementById("status").innerHTML = `🔊 삐-삐!<br>(${currentCount} / ${totalCount}회 울림)`;
+                    }
+
+                    updateDisplay();
+                } else {
+                    clearInterval(mainTimer);
+                    mainTimer = null;
+                    currentIntervalSeconds = 0;
+                    updateDisplay();
+                    
+                    document.getElementById("status").innerHTML = "✅ 설정된 시간이 모두 경과하였습니다!";
+                    document.getElementById("pauseBtn").style.display = "none";
+                    document.getElementById("startBtn").style.display = "inline-block";
+                    document.getElementById("startBtn").innerText = "다시 시작";
+                    
+                    // 설정 입력창 다시 활성화
+                    document.getElementById("settingsBox").style.opacity = "1";
+                    document.getElementById("totalMinutesInput").disabled = false;
+                    document.getElementById("intervalSecondsInput").disabled = false;
+                    
+                    alert("타이머가 종료되었사옵니다!");
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            if (mainTimer) {
+                clearInterval(mainTimer);
+                mainTimer = null;
+            }
+            isPaused = true;
+
+            document.getElementById("status").innerHTML = "⏸️ 일시정지됨<br>(시작 버튼을 누르면 재개됩니다)";
+            document.getElementById("pauseBtn").style.display = "none";
+            document.getElementById("startBtn").style.display = "inline-block";
+            document.getElementById("startBtn").innerText = "계속 진행";
+        }
+
+        function resetTimer() {
+            if (mainTimer) {
+                clearInterval(mainTimer);
+                mainTimer = null;
+            }
+
+            isPaused = false;
+            applySettings();
+
+            // 설정 입력창 활성화
+            document.getElementById("settingsBox").style.opacity = "1";
+            document.getElementById("totalMinutesInput").disabled = false;
+            document.getElementById("intervalSecondsInput").disabled = false;
+
+            document.getElementById("status").innerHTML = "대기 중<br>(설정 후 시작 버튼을 누르시옵소서)";
+            document.getElementById("pauseBtn").style.display = "none";
+            document.getElementById("resetBtn").style.display = "none";
+            document.getElementById("startBtn").style.display = "inline-block";
+            document.getElementById("startBtn").innerText = "시작";
+        }
+
+        // 초기 화면 설정 적용
+        applySettings();
+    </script>
+
+</body>
+</html>
