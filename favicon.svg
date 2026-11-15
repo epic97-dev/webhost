@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#182947"/>
+      <stop offset=".55" stop-color="#0b1830"/>
+      <stop offset="1" stop-color="#172642"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#f1dfaa"/>
+      <stop offset=".48" stop-color="#c6a65d"/>
+      <stop offset="1" stop-color="#f4e3ae"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#050b16" flood-opacity=".65"/>
+    </filter>
+    <pattern id="grain" width="8" height="8" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r=".45" fill="#d9c37e" opacity=".16"/>
+      <circle cx="6" cy="5" r=".35" fill="#d9c37e" opacity=".1"/>
+    </pattern>
+  </defs>
+
+  <!-- Enamel travel-pass body and double engraved frame -->
+  <rect x="7" y="5" width="242" height="246" rx="27" fill="url(#navy)" stroke="#bd9e5a" stroke-width="2.3" filter="url(#shadow)"/>
+  <rect x="12" y="10" width="232" height="236" rx="22" fill="none" stroke="#e0c67d" stroke-width="1.1"/>
+  <rect x="17" y="15" width="222" height="226" rx="18" fill="url(#grain)" stroke="#78663e" stroke-width=".8"/>
+  <path d="M26 20h204a7 7 0 0 1 7 7v202a7 7 0 0 1-7 7H26a7 7 0 0 1-7-7V27a7 7 0 0 1 7-7Z" fill="none" stroke="#cbb16d" stroke-width=".7" opacity=".8"/>
+
+  <!-- Title plaque -->
+  <path d="M31 29h194M39 33h178" stroke="#9b824d" stroke-width=".7"/>
+  <text x="128" y="58" text-anchor="middle" fill="#091326" stroke="#091326" stroke-width="2" paint-order="stroke" font-family="Georgia,'Times New Roman',serif" font-size="29" font-weight="700" letter-spacing="1.8">EURO PASS</text>
+  <text x="127" y="56.5" text-anchor="middle" fill="url(#gold)" font-family="Georgia,'Times New Roman',serif" font-size="29" font-weight="700" letter-spacing="1.8">EURO PASS</text>
+  <path d="M35 66h186m-177 4h168" stroke="#d4bd7d" stroke-width=".8"/>
+
+  <!-- Fine architectural linework -->
+  <g fill="none" stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Colosseum, left -->
+    <g stroke-width="1.45">
+      <path d="M20 208q2-43 30-57 27 13 30 57v14H20z"/>
+      <path d="M23 170q27 10 54 0M21 181q28 10 57 0M20 193q30 10 60 0M20 205h60M24 216h52"/>
+      <path d="M28 174v6m9-3v7m10-5v7m10-9v7m9-9v7m-39 12v9m12-8v10m12-10v10m12-10v9m-36 8v9m12-8v9m12-9v9m12-9v8"/>
+      <path d="M26 163q24 8 49 0M31 157q18 6 37 0" stroke-width=".85"/>
+      <path d="M18 222h66m-59 4h51" stroke-width="1.1"/>
+    </g>
+
+    <!-- Eiffel Tower, center -->
+    <g stroke-width="1.45">
+      <path d="M107 222 123 91h10l16 131M111 210h34m-31-17h28m-25-17h22m-20-17h18m-16-16h14m-12-15h10m-8-14h6m-4-12h2"/>
+      <path d="M119 101h18m-20 15h22m-24 16h26m-27 17h28m-30 18h32m-34 17h36m-38 18h40m-42 18h44" stroke-width="1.05"/>
+      <path d="m110 222 32-29m-27 0 30 29m-34-46 26-17m-22 0 25 17m-27-34 20-15m-17 0 19 15m-20-31 14-11m-12 0 13 11m-12-21 9-8m-7 0 7 8" stroke-width=".95"/>
+      <path d="M124 91v-8h8v8m-9-8 5-7 5 7m-6-7V68m-4 9h10M105 224h52m-46 4h40" stroke-width="1.1"/>
+      <path d="M117 122h22M114 157h28M109 193h38" stroke-width=".75"/>
+    </g>
+
+    <!-- Sagrada Família, right -->
+    <g stroke-width="1.35">
+      <path d="M158 222v-48l10-14 10 14v48m4 0v-70l10-16 10 16v70m4 0v-59l9-13 9 13v59m-67 0v-36l7-10 7 10v36"/>
+      <path d="M168 160v-15m0 0-5 7m5-7 5 7m24-13v-17m0 0-5 8m5-8 5 8m23 18v-14m0 0-5 7m5-7 5 7m-62 23h13m4-8h20m4 9h17m-65 24h67m-68 13h69m-71 13h72m-74 12h76"/>
+      <path d="M164 222v-20m9 20v-20m9-28v-17m20 17v-23m-20 44v-20m19 21v-20m18 20v-18m-58 31v-13m-1 36h76" stroke-width=".9"/>
+      <path d="M160 174h18m4-22h20m4 8h17m-62 50h67" stroke-width=".8"/>
+      <path d="M192 129v-8h8v8m-4-8v-8m-27 32v-7h8v7m18-29h8m20 35v-7h8v7" stroke-width=".85"/>
+    </g>
+  </g>
+
+  <!-- Baseline and small ornamental stars -->
+  <path d="M20 229h216" stroke="#e4d08e" stroke-width="1"/>
+  <path d="m92 80 1.7 3.8 3.8 1.7-3.8 1.7-1.7 3.8-1.7-3.8-3.8-1.7 3.8-1.7zm72-2 1.2 2.7 2.7 1.2-2.7 1.2-1.2 2.7-1.2-2.7-2.7-1.2 2.7-1.2z" fill="#e5cf8b" opacity=".9"/>
+</svg>
